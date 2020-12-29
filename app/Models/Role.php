@@ -21,15 +21,15 @@ class Role extends Model
 
     public function users()
     {
-        return $this->belongsToMany('App\Models\User');
+        return $this->belognsToMany('App\Models\User');
     }
 
 // ALMACENAMIENTO
 
-// VALIDACIÓN
+// VALIDACION
 
 // RECUPERACIÓN DE INFORMACIÓN
 
-// OTRAS OPERACIONES
+//OTRAS OPERACIONES
 
 }

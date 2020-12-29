@@ -21,14 +21,14 @@ class Permission extends Model
 
     public function users()
     {
-        return $this->belongsToMany('App\Models\User');
+        return $this->belongsToMany('App\Models\User')->withTimestamps;
     }
 
 // ALMACENAMIENTO
 
-// VALIDACIÓN
+// VALIDACION
 
 // RECUPERACIÓN DE INFORMACIÓN
 
-// OTRAS OPERACIONES
+//OTRAS OPERACIONES
 }
