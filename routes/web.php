@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +16,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Auth::routes(['verify' => true]);
 
 Auth::routes();
 
@@ -30,7 +29,7 @@ Auth::routes();
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
 
-    return redirect('/home');
+    return redirect('/roles');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Auth::routes();
@@ -41,22 +40,13 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
+// BACKOFFICE
+Route::group(['middleware' => ['auth'], 'as' => 'backoffice.'], function() {
+    Route::resource('role', RoleController::class);
+});
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

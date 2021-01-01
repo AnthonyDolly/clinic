@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Http\Requests\Role\StoreRequest;
+use App\Http\Requests\Role\UpdateRequest;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -14,7 +16,9 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        return view('theme.backoffice.pages.role.index', [
+            'roles' => Role::all()
+        ]);
     }
 
     /**
@@ -24,7 +28,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('theme.backoffice.pages.role.create');
     }
 
     /**
@@ -33,9 +37,10 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request, Role $role)
     {
-        //
+        $role = $role->store($request);
+        return redirect()->route('backoffice.role.show', $role);
     }
 
     /**
@@ -46,7 +51,9 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        //
+        return view('theme.backoffice.pages.role.show', [
+            'role' => $role
+        ]);
     }
 
     /**
@@ -57,7 +64,9 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        //
+        return view('theme.backoffice.pages.role.edit', [
+            'role' => $role
+        ]);
     }
 
     /**
@@ -67,9 +76,10 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRequest $request, Role $role)
     {
-        //
+        $role->my_update($request);
+        return redirect()->route('backoffice.role.show', $role);
     }
 
     /**
@@ -80,6 +90,8 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        //
+        $role->delete();
+        alert('Exito!','El rol ha sido eliminado', 'success');
+        return redirect()->route('backoffice.role.index');
     }
 }
