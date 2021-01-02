@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,7 @@ Auth::routes();
 // BACKOFFICE
 Route::group(['middleware' => ['auth'], 'as' => 'backoffice.'], function() {
     Route::resource('role', RoleController::class);
+    Route::resource('permission', PermissionController::class);
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
