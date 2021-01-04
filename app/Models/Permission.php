@@ -22,7 +22,7 @@ class Permission extends Model
 
     public function users()
     {
-        return $this->belongsToMany('App\Models\User')->withTimestamps;
+        return $this->belongsToMany('App\Models\User')->withTimestamps();
     }
 
 // ALMACENAMIENTO

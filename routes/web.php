@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +18,10 @@ use App\Http\Controllers\PermissionController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/', function(){
+     return view('welcome');
+});
 
 Auth::routes(['verify' => true]);
 
@@ -30,7 +36,7 @@ Auth::routes();
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
 
-    return redirect('/roles');
+    return redirect('/role');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Auth::routes();
@@ -46,6 +52,12 @@ Auth::routes();
 
 // BACKOFFICE
 Route::group(['middleware' => ['auth'], 'as' => 'backoffice.'], function() {
+    Route::get('admin', [AdminController::class, 'show'])->name('admin.show');
+    Route::resource('user', UserController::class);
+    Route::get('user/{user}/assign_role', [UserController::class, 'assign_role'])->name('user.assign_role');
+    Route::post('user/{user}/role_assignment', [UserController::class, 'role_assignment'])->name('user.role_assignment');
+    Route::get('user/{user}/assign_permission', [UserController::class, 'assign_permission'])->name('user.assign_permission');
+    Route::post('user/{user}/permission_assignment', [UserController::class, 'permission_assignment'])->name('user.permission_assignment');
     Route::resource('role', RoleController::class);
     Route::resource('permission', PermissionController::class);
 });

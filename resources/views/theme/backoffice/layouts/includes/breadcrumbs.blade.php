@@ -8,7 +8,7 @@
             <div class="col s10 m6 l6">
                 <h5 class="breadcrumbs-title">@yield('title')</h5>
                 <ol class="breadcrumbs">
-                    <li><a href="#">Panel de administración</a></li>
+                    <li><a href="{{ route('backoffice.admin.show') }}">Panel de administración</a></li>
                     @yield('breadcrumbs')
                 </ol>
             </div>

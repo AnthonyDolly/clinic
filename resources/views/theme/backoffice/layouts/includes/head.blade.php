@@ -8,5 +8,6 @@
 <link href="{{ asset('assets/backoffice/css/custom.css') }}" rel="stylesheet">
 <link href="{{ asset('assets/plugins/perfect-scrollbar/perfect-scrollbar.css') }}" rel="stylesheet">
 <link href="{{ asset('assets/plugins/flag-icon/css/flag-icon.min.css') }}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 @yield('head')
