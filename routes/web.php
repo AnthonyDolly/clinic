@@ -54,6 +54,10 @@ Auth::routes();
 Route::group(['middleware' => ['auth'], 'as' => 'backoffice.'], function() {
     Route::get('admin', [AdminController::class, 'show'])->name('admin.show');
     Route::resource('user', UserController::class);
+
+    Route::get('user_import', [UserController::class, 'import'])->name('user.import');
+    Route::post('user_make_import', [UserController::class, 'make_import'])->name('user.make_import');
+
     Route::get('user/{user}/assign_role', [UserController::class, 'assign_role'])->name('user.assign_role');
     Route::post('user/{user}/role_assignment', [UserController::class, 'role_assignment'])->name('user.role_assignment');
     Route::get('user/{user}/assign_permission', [UserController::class, 'assign_permission'])->name('user.assign_permission');

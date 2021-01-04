@@ -9,6 +9,10 @@ use App\Http\Requests\User\StoreRequest;
 use App\Http\Requests\User\UpdateRequest;
 use Illuminate\Http\Request;
 
+use App\Imports\UsersImport;
+use Maatwebsite\Excel\Facades\Excel;
+
+
 class UserController extends Controller
 {
     /**
@@ -141,5 +145,25 @@ class UserController extends Controller
         $user->permissions()->sync($request->permissions);
         alert('Exito', 'Permisos asignados', 'success');
         return redirect()->route('backoffice.user.show', $user);
+    }
+
+    /**
+     * Mostrar el formulario para importar usuarios
+     * 
+     */
+    public function import()
+    {
+        return view('theme.backoffice.pages.user.import');
+    }
+
+    /**
+     * Importar usuarios desde una hoja de excel
+     * 
+     */
+    public function make_import(Request $request)
+    {
+        Excel::import(new UsersImport, $request->file('excel'));
+        alert('Exito', 'Usuarios importados', 'success');
+        return redirect()->route('backoffice.user.index');
     }
 }
