@@ -10,6 +10,11 @@ class PermissionPolicy
 {
     use HandlesAuthorization;
 
+    public function index(User $user)
+    {
+        return $user->has_permission('index-permission');
+    }
+
     /**
      * Determine whether the user can view any models.
      *
@@ -30,7 +35,7 @@ class PermissionPolicy
      */
     public function view(User $user, Permission $permission)
     {
-        //
+        return $user->has_permission('view-permission');
     }
 
     /**
@@ -41,7 +46,7 @@ class PermissionPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->has_permission('view-permission');
     }
 
     /**
@@ -53,7 +58,7 @@ class PermissionPolicy
      */
     public function update(User $user, Permission $permission)
     {
-        //
+        return $user->has_permission('update-permission');
     }
 
     /**
@@ -65,7 +70,7 @@ class PermissionPolicy
      */
     public function delete(User $user, Permission $permission)
     {
-        //
+        return $user->has_permission('delete-permission');
     }
 
     /**
