@@ -153,4 +153,29 @@ class User extends Authenticatable implements MustVerifyEmail
             }
         }
     }
+// VISTAS
+    public function edit_view($view = null)
+    {
+        $auth = auth()->user();
+
+        if (!is_null($view) && $view == 'frontoffice') {
+            return 'theme.frontoffice.pages.user.edit';
+        } elseif ($auth->has_role(config('app.admin_role'))) {
+            return 'theme.backoffice.pages.user.edit';
+        } else {
+            return 'theme.frontoffice.pages.user.edit';
+        }
+    }
+    
+    public function user_show($view = null)
+    {
+        $auth = auth()->user();
+        if (!is_null($view) && $view == 'frontoffice') {
+            return 'frontoffice.user.profile';
+        } elseif ($auth->has_role(config('app.admin_role'))) {
+            return 'backoffice.user.show';
+        } else {
+            return 'frontoffice.user.profile';
+        }
+    }
 }

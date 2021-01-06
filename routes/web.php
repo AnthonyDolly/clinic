@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PatientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,4 +68,17 @@ Route::group(['middleware' => ['auth'], 'as' => 'backoffice.'], function() {
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::group(['as' =>'frontoffice.'], function() {
+    Route::get('profile', [UserController::class, 'profile'])->name('user.profile');
+    Route::get('profile/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('profile/{user}/update', [UserController::class, 'update'])->name('user.update');
+    Route::get('profile/edit_password', [UserController::class, 'edit_password'])->name('user.edit_password');
+    Route::put('profile/change_password', [UserController::class, 'change_password'])->name('user.change_password');
+
+    Route::get('patient/schedule',[PatientController::class, 'schedule'])->name('patient.schedule');
+    Route::get('patient/appointments',[PatientController::class, 'appointments'])->name('patient.appointments');
+    Route::get('patient/prescriptions',[PatientController::class, 'prescriptions'])->name('patient.prescriptions');
+    Route::get('patient/invoices',[PatientController::class, 'invoices'])->name('patient.invoices');
+});
 

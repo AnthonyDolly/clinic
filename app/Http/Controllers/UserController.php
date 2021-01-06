@@ -7,14 +7,22 @@ use App\Models\Role;
 
 use App\Http\Requests\User\StoreRequest;
 use App\Http\Requests\User\UpdateRequest;
+use App\Http\Requests\User\ChangePasswordRequest;
 use Illuminate\Http\Request;
 
 use App\Imports\UsersImport;
 use Maatwebsite\Excel\Facades\Excel;
 
+use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {
+    public function __construc()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -76,7 +84,8 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $this->authorize('update', $user);
-        return view('theme.backoffice.pages.user.edit', [
+        $view = (isset($_GET['view'])) ? $_GET['view'] : null;
+        return view($user->edit_view($view) , [
             'user' => $user
         ]);
     }
@@ -91,7 +100,8 @@ class UserController extends Controller
     public function update(UpdateRequest $request, User $user)
     {
         $user->my_update($request);
-        return redirect()->route('backoffice.user.show', $user);
+        $view = (isset($_GET['view'])) ? $_GET['view'] : null;
+        return redirect()->route($user->user_show(), $user);
     }
 
     /**
@@ -176,5 +186,27 @@ class UserController extends Controller
         Excel::import(new UsersImport, $request->file('excel'));
         alert('Exito', 'Usuarios importados', 'success');
         return redirect()->route('backoffice.user.index');
+    }
+
+    public function profile()
+    {
+        $user = auth()->user();
+        return view('theme.frontoffice.pages.user.profile', [
+            'user' => $user
+        ]);
+    }
+
+    public function edit_password()
+    {
+        $this->authorize('update_password', auth()->user());
+        return view('theme.frontoffice.pages.user.edit_password');
+    }
+
+    public function change_password(ChangePasswordRequest $request)
+    {
+        $request->user()->password = Hash::make($request->password);
+        $request->user()->save();
+        alert('Exito','Contraseña actualizada', 'success');
+        return redirect()->back();
     }
 }
