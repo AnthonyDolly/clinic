@@ -54,15 +54,19 @@ Auth::routes();
 // BACKOFFICE
 Route::group(['middleware' => ['auth'], 'as' => 'backoffice.'], function() {
     Route::get('admin', [AdminController::class, 'show'])->name('admin.show');
+
     Route::resource('user', UserController::class);
-
-    Route::get('user_import', [UserController::class, 'import'])->name('user.import');
-    Route::post('user_make_import', [UserController::class, 'make_import'])->name('user.make_import');
-
     Route::get('user/{user}/assign_role', [UserController::class, 'assign_role'])->name('user.assign_role');
     Route::post('user/{user}/role_assignment', [UserController::class, 'role_assignment'])->name('user.role_assignment');
     Route::get('user/{user}/assign_permission', [UserController::class, 'assign_permission'])->name('user.assign_permission');
     Route::post('user/{user}/permission_assignment', [UserController::class, 'permission_assignment'])->name('user.permission_assignment');
+    Route::get('user_import', [UserController::class, 'import'])->name('user.import');
+    Route::post('user_make_import', [UserController::class, 'make_import'])->name('user.make_import');
+
+    Route::get('patient/{user}/schedule', [PatientController::class, 'back_schedule'])->name('patient.schedule');
+    Route::get('patient/{user}/appointments', [PatientController::class, 'back_appointments'])->name('patient.appointments');
+    Route::get('patient/{user}/invoices', [PatientController::class, 'back_invoices'])->name('patient.invoices');
+    
     Route::resource('role', RoleController::class);
     Route::resource('permission', PermissionController::class);
 });

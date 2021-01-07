@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Role;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -132,6 +133,40 @@ class User extends Authenticatable implements MustVerifyEmail
         return $msj;
     }
 
+    public function visible_users()
+    {
+        if ($this->has_role(config('app.admin_role'))) {
+            $users = self::all();
+        }
+        if ($this->has_role(config('app.secretary_role'))) {
+            $users = self::whereHas('roles', function($query) {
+                $query->whereIn('slug', [
+                    config('app.doctor_role'),
+                    config('app.patient_role')
+                ]);
+            })->get();
+        }
+        if ($this->has_role(config('app.doctor_role'))) {
+            $users = self::whereHas('roles', function($query) {
+                $query->whereIn('slug', [
+                    config('app.patient_role')
+                ]);
+            })->get();
+        }
+        return $users;
+    }
+
+    public function visible_roles()
+    {
+        if ($this->has_role(config('app.admin_role'))) {
+            $roles = Role::all();
+        }
+        if ($this->has_role(config('app.secretary_role'))) {
+            $roles = Role::where('slug', config('app.patient_role'))->get();
+        }
+        return $roles;
+    }
+
 // OTRAS OPERACIONES
     public function verify_permission_integrity(array $roles)
     {
@@ -160,7 +195,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
         if (!is_null($view) && $view == 'frontoffice') {
             return 'theme.frontoffice.pages.user.edit';
-        } elseif ($auth->has_role(config('app.admin_role'))) {
+        } elseif ($auth->has_any_role([config('app.admin_role'), config('app.secretary_role')])) {
             return 'theme.backoffice.pages.user.edit';
         } else {
             return 'theme.frontoffice.pages.user.edit';
@@ -172,7 +207,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $auth = auth()->user();
         if (!is_null($view) && $view == 'frontoffice') {
             return 'frontoffice.user.profile';
-        } elseif ($auth->has_role(config('app.admin_role'))) {
+        } elseif ($auth->has_any_role([config('app.admin_role'), config('app.secretary_role')])) {
             return 'backoffice.user.show';
         } else {
             return 'frontoffice.user.profile';

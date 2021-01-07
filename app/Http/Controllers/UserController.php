@@ -32,7 +32,7 @@ class UserController extends Controller
     {
         $this->authorize('index', User::class);
         return view('theme.backoffice.pages.user.index', [
-            'users' => User::all()
+            'users' => auth()->user()->visible_users()
         ]);
     }
 
@@ -45,7 +45,7 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
         return view('theme.backoffice.pages.user.create', [
-            'roles' => \App\Models\Role::all()
+            'roles' => auth()->user()->visible_roles()
         ]);
     }
 

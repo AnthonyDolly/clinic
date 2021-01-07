@@ -25,6 +25,18 @@
                             <div class="input-field col s12">
                                 <i class="material-icons prefix">people</i>
                                 <select name="doctor" id="">
+                                    <option value="1">Pediatria</option>
+                                    <option value="2">Odontología</option>
+                                    <option value="3">Neurología</option>
+                                </select>
+                                <label>Selecciona la Especialidad</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">people</i>
+                                <select name="doctor" id="">
                                     <option value="1">Raul</option>
                                     <option value="2">Carlos</option>
                                     <option value="3">Beto</option>
@@ -35,13 +47,11 @@
                         <div class="row">
                             <div class="input-field col s12 m6">
                                 <i class="material-icons prefix">today</i>
-                                <input type="text" name="date" class="datepicker" id="datepicker">
-                                <label for="datepicker">Selecciona una fecha</label>
+                                <input type="text" name="date" class="datepicker" id="datepicker" placeholder="Seleccionar Fecha">
                             </div>
                             <div class="input-field col s12 m6">
                                 <i class="material-icons prefix">access_time</i>
-                                <input type="text" name="time" class="timepicker" id="timepicker">
-                                <label for="timepicker">Selecciona un horario</label>
+                                <input type="text" name="time" class="timepicker" id="timepicker" placeholder="Seleccionar Hora">
                             </div>
                         </div>
                         <div class="row">
