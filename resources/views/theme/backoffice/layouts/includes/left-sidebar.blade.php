@@ -59,6 +59,12 @@
                         <span class="nav-text">Permisos del Sistema</span>
                     </a>
                 </li>
+                <li class="bold">
+                    <a href="{{ route('backoffice.specialty.index') }}" class="waves-effect waves-cyan">
+                        <i class="material-icons">local_hospital</i>
+                        <span class="nav-text">Especialidades Médicas</span>
+                    </a>
+                </li>
             </ul>
         </li>
     </ul>

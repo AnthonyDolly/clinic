@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Specialty;
 
 use App\Http\Requests\User\StoreRequest;
 use App\Http\Requests\User\UpdateRequest;
@@ -163,6 +164,25 @@ class UserController extends Controller
         $this->authorize('assign_permission', $user);
         $user->permissions()->sync($request->permissions);
         alert('Exito', 'Permisos asignados', 'success');
+        return redirect()->route('backoffice.user.show', $user);
+    }
+
+    /**
+     * Mostrar formulario para asignar especialidades
+     * 
+     */
+    public function assign_specialty(User $user)
+    {
+        return view('theme.backoffice.pages.user.assign_specialty', [
+            'user' => $user,
+            'specialties' => Specialty::all()
+        ]);
+    }
+
+    public function specialty_assignment(Request $request, User $user)
+    {
+        $user->specialties()->sync($request->specialties);
+        alert('Exito', 'Especialidaes asignadas', 'success');
         return redirect()->route('backoffice.user.show', $user);
     }
 

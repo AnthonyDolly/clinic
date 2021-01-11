@@ -10,3 +10,11 @@ if (!function_exists('active_class'))
         }
     }
 }
+
+if (!function_exists('user'))
+{
+    function user()
+    {
+        return auth()->user();
+    }
+}

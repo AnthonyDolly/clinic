@@ -57,6 +57,21 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany('App\Models\Role')->withTimestamps();
     }
 
+    public function specialties()
+    {
+        return $this->belongsToMany('App\Models\Specialty')->withTimestamps();
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany('App\Models\Invoice');
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany('App\Models\Appointment');
+    }
+
 // ALMACENAMIENTO
     public function store($request)
     {
@@ -120,6 +135,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return false;
     }
 
+    public function has_specialty($id)
+    {
+        foreach ($this->specialties as $specialty) {
+            if ($specialty->id == $id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 // RECUPERACIÓN DE INFORMACIÓN
     public function age()
     {
@@ -137,16 +162,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         if ($this->has_role(config('app.admin_role'))) {
             $users = self::all();
-        }
-        if ($this->has_role(config('app.secretary_role'))) {
+        } elseif ($this->has_role(config('app.secretary_role'))) {
             $users = self::whereHas('roles', function($query) {
                 $query->whereIn('slug', [
                     config('app.doctor_role'),
                     config('app.patient_role')
                 ]);
             })->get();
-        }
-        if ($this->has_role(config('app.doctor_role'))) {
+        } elseif ($this->has_role(config('app.doctor_role'))) {
             $users = self::whereHas('roles', function($query) {
                 $query->whereIn('slug', [
                     config('app.patient_role')
@@ -161,10 +184,24 @@ class User extends Authenticatable implements MustVerifyEmail
         if ($this->has_role(config('app.admin_role'))) {
             $roles = Role::all();
         }
-        if ($this->has_role(config('app.secretary_role'))) {
+        if ($this->has_any_role([config('app.secretary_role'), config('app.doctor_role')])) {
             $roles = Role::where('slug', config('app.patient_role'))->get();
         }
         return $roles;
+    }
+
+    public function list_roles()
+    {
+        $roles = $this->roles->pluck('name')->toArray();
+        $string = implode(', ', $roles);
+        return $string;
+    }
+
+    public function list_specialties()
+    {
+        $specialties = $this->specialties->pluck('name')->toArray();
+        $string = implode(', ', $specialties);
+        return $string;
     }
 
 // OTRAS OPERACIONES

@@ -28,13 +28,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Consulta con el Dr. Jorge</td>
-                                <td>S/50</td>
-                                <td>Pagado</td>
-                                <td><a href="#modal" data-prescription="1" class="modal-trigger">Ver</a></td>
-                            </tr>
+                            @forelse ($invoices as $invoice)
+                                <tr>
+                                    <td>{{ $invoice->id }}</td>
+                                    <td>{{ $invoice->concept() }}</td>
+                                    <td>{{ $invoice->amount }}</td>
+                                    <td>{{ $invoice->status }}</td>
+                                    <td>
+                                        <a href="#modal" data-invoice="{{ $invoice->id }}" onclick="modal_invoice(this)" class="modal-trigger">
+                                            Ver
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5">Usted no tiene facturas</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -43,8 +53,11 @@
     </div>
     <div class="modal" id="modal">
         <div class="modal-content">
-            <h4>Título</h4>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos maiores consequatur repellendus aspernatur placeat illum, illo maxime. Maxime accusamus omnis, modi mollitia nesciunt earum, vel fugiat blanditiis quos esse voluptatum?</p>
+            <h4 id="modal_invoice_title">Información de la factura</h4>
+            <p><strong>Folio: </strong><span id="modal_invoice_id"></span></p>
+            <p><strong>Doctor: </strong><span id="modal_invoice_doctor"></span></p>
+            <p><strong>Concepto: </strong><span id="modal_invoice_concept"></span></p>
+            <p><strong>Monto: </strong><span id="modal_invoice_amount"></span></p>
         </div>
         <div class="modal-footer">
             <a href="" class="modal-close waves-effect btn-flat">Cerrar</a>
@@ -57,5 +70,24 @@
 @section('foot')
 <script type="text/javascript">
     $('.modal').modal();
+
+    function modal_invoice(e)
+    {
+        var invoice_id = $(e).data('invoice');
+        $.ajax({
+            url: '{{ route('ajax.invoice_info') }}',
+            method: 'GET',
+            data: {
+                invoice_id: invoice_id
+            },
+            success: function(data)
+            {
+                $('#modal_invoice_id').html(data.invoice.id);
+                $('#modal_invoice_doctor').html(data.doctor.name);
+                $('#modal_invoice_concept').html(data.concept);
+                $('#modal_invoice_amount').html(data.invoice.amount);
+            }
+        });
+    }
 </script>
 @endsection

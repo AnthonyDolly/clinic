@@ -8,6 +8,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\SpecialtyController;
+use App\Http\Controllers\AjaxController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,11 +57,7 @@ Auth::routes();
 Route::group(['middleware' => ['auth'], 'as' => 'backoffice.'], function() {
     Route::get('admin', [AdminController::class, 'show'])->name('admin.show');
 
-    Route::resource('user', UserController::class);
-    Route::get('user/{user}/assign_role', [UserController::class, 'assign_role'])->name('user.assign_role');
-    Route::post('user/{user}/role_assignment', [UserController::class, 'role_assignment'])->name('user.role_assignment');
-    Route::get('user/{user}/assign_permission', [UserController::class, 'assign_permission'])->name('user.assign_permission');
-    Route::post('user/{user}/permission_assignment', [UserController::class, 'permission_assignment'])->name('user.permission_assignment');
+    Route::resource('user', UserController::class);    
     Route::get('user_import', [UserController::class, 'import'])->name('user.import');
     Route::post('user_make_import', [UserController::class, 'make_import'])->name('user.make_import');
 
@@ -68,7 +66,16 @@ Route::group(['middleware' => ['auth'], 'as' => 'backoffice.'], function() {
     Route::get('patient/{user}/invoices', [PatientController::class, 'back_invoices'])->name('patient.invoices');
     
     Route::resource('role', RoleController::class);
+    Route::get('user/{user}/assign_role', [UserController::class, 'assign_role'])->name('user.assign_role');
+    Route::post('user/{user}/role_assignment', [UserController::class, 'role_assignment'])->name('user.role_assignment');
+
     Route::resource('permission', PermissionController::class);
+    Route::get('user/{user}/assign_permission', [UserController::class, 'assign_permission'])->name('user.assign_permission');
+    Route::post('user/{user}/permission_assignment', [UserController::class, 'permission_assignment'])->name('user.permission_assignment');
+
+    Route::resource('specialty', SpecialtyController::class);
+    Route::get('user/{user}/assign_specialty', [UserController::class, 'assign_specialty'])->name('user.assign_specialty');
+    Route::post('user/{user}/specialty_assignment', [UserController::class, 'specialty_assignment'])->name('user.specialty_assignment');
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -81,8 +88,14 @@ Route::group(['as' =>'frontoffice.'], function() {
     Route::put('profile/change_password', [UserController::class, 'change_password'])->name('user.change_password');
 
     Route::get('patient/schedule',[PatientController::class, 'schedule'])->name('patient.schedule');
+    Route::post('patient/schedule',[PatientController::class, 'store_schedule'])->name('patient.store_schedule');
     Route::get('patient/appointments',[PatientController::class, 'appointments'])->name('patient.appointments');
     Route::get('patient/prescriptions',[PatientController::class, 'prescriptions'])->name('patient.prescriptions');
     Route::get('patient/invoices',[PatientController::class, 'invoices'])->name('patient.invoices');
+});
+
+Route::group(['middleware' => ['auth'], 'as' => 'ajax.'], function() {
+    Route::get('user_specialty', [AjaxController::class, 'user_specialty'])->name('user_specialty');
+    Route::get('invoice_info', [AjaxController::class, 'invoice_info'])->name('invoice_info');
 });
 

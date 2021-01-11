@@ -17,17 +17,18 @@
             <div class="card">
                 <div class="card-content">
                     <span class="card-title">@yield('title')</span>
-                    <form action="" method="post">
+                    <form action="{{ route('frontoffice.patient.store_schedule') }}" method="post">
 
                         {{ csrf_field() }}
 
                         <div class="row">
                             <div class="input-field col s12">
                                 <i class="material-icons prefix">people</i>
-                                <select name="doctor" id="">
-                                    <option value="1">Pediatria</option>
-                                    <option value="2">Odontología</option>
-                                    <option value="3">Neurología</option>
+                                <select name="specialty" id="specialty">
+                                    <option disabled selected>--Selecciona una especialidad--</option>
+                                    @foreach ($specialties as $specialty)
+                                        <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
+                                    @endforeach
                                 </select>
                                 <label>Selecciona la Especialidad</label>
                             </div>
@@ -36,10 +37,8 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <i class="material-icons prefix">people</i>
-                                <select name="doctor" id="">
-                                    <option value="1">Raul</option>
-                                    <option value="2">Carlos</option>
-                                    <option value="3">Beto</option>
+                                <select name="doctor" id="doctor">
+                                    <option disabled selected>--Primero selecciona una especialidad--</option>
                                 </select>
                                 <label>Selecciona al doctor</label>
                             </div>
@@ -74,13 +73,57 @@
     <script type="text/javascript">
         $('select').formSelect();
         var input_date = $('.datepicker').pickadate({
-            min: true
+            min: true,
+            formatSubmit: 'yyyy-m-d'
         });
         var date_picker = input_date.pickadate('picker');
 
         var input_time = $('.timepicker').pickatime({
-            min: 4
+            min: 4,
+            formatSubmit: 'HH:i'
         });
         var time_picker = input_time.pickatime('picker');
+
+        var specialty = $('#specialty');
+        var doctor = $('#doctor');
+
+        specialty.change(function() {
+            $.ajax({
+                url: '{{ route('ajax.user_specialty') }}',
+                method: 'GET',
+                data: {
+                    specialty: specialty.val(),
+                },
+                success: function(data) {
+                    doctor.empty();
+
+                    doctor.append('<option disabled selected>--Selecciona un médico--</option>');
+
+                    $.each(data, function(index, element) {
+                        doctor.append('<option value="' + element.id + '"> ' + element.name  + '</option>');
+                    });
+
+                    doctor.formSelect();
+                }
+            });
+        });
+
+        doctor.change(function() {
+            date_picker.set({
+                disable: [
+                    [2021,0,21]
+                ],
+            });
+
+            time_picker.set({
+                min: [7,30],
+                max: [21,0],
+                disable: [
+                    { from: [14,0], to: [15,30]},
+                    [10,0],
+                ]
+            });
+        });
+
     </script>
 @endsection
