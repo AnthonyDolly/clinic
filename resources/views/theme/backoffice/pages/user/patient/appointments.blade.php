@@ -24,26 +24,9 @@
             <div class="col s12 m8">
                 <div class="card-panel">
                     <div class="row">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Día</th>
-                                    <th>Hora</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>784</td>
-                                    <td>25/01/2020</td>
-                                    <td>15:00</td>
-                                    <td>En progreso</td>
-                                    <td><a href="">Editar</a></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        @include('theme.includes.user.patient.appointments_table', [
+                            'update' => true
+                        ])
                     </div>
                 </div>
             </div>

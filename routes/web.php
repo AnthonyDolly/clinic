@@ -62,8 +62,17 @@ Route::group(['middleware' => ['auth'], 'as' => 'backoffice.'], function() {
     Route::post('user_make_import', [UserController::class, 'make_import'])->name('user.make_import');
 
     Route::get('patient/{user}/schedule', [PatientController::class, 'back_schedule'])->name('patient.schedule');
+    Route::post('patient/{user}/store_back_schedule', [PatientController::class, 'store_back_schedule'])->name('patient.store_back_schedule');
+
+    Route::get('backoffice/appointments', [PatientController::class, 'show_appointments'])->name('patient.appointments.show');
+    Route::get('backoffice/doctor/{user}/appointments', [PatientController::class, 'show_doctor_appointments'])->name('doctor.appointments.show');
     Route::get('patient/{user}/appointments', [PatientController::class, 'back_appointments'])->name('patient.appointments');
+    Route::get('patient/{user}/appointments/{appointment}/edit', [PatientController::class, 'back_appointments_edit'])->name('patient.appointments.edit');
+    Route::post('patient/{user}/appointments/{appointment}/update', [PatientController::class, 'back_appointments_update'])->name('patient.appointments.update');
+
     Route::get('patient/{user}/invoices', [PatientController::class, 'back_invoices'])->name('patient.invoices');
+    Route::get('patient/{user}/invoices/{invoice}/edit', [PatientController::class, 'back_invoices_edit'])->name('patient.invoices.edit');
+    Route::post('patient/{user}/invoices/{invoice}/update', [PatientController::class, 'back_invoices_update'])->name('patient.invoices.update');
     
     Route::resource('role', RoleController::class);
     Route::get('user/{user}/assign_role', [UserController::class, 'assign_role'])->name('user.assign_role');

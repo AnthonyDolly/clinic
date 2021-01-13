@@ -28,54 +28,9 @@
                 <div class="card">
                     <div class="card-content">
                         <span class="card-title">@yield('title')</span>
-                        <form action="" method="post">
-    
-                            {{ csrf_field() }}
-    
-                            @if (Auth::user()->has_role(config('app.doctor_role')))
-                                <input type="hidden" name="specialty" value="">
-                                <input type="hidden" name="doctor" value="{{ Auth::id() }}">
-                            @else
-                                <div class="row">
-                                    <div class="input-field col s12">
-                                        <i class="material-icons prefix">people</i>
-                                        <select name="especialidad">
-                                            <option value="1">Pediatria</option>
-                                            <option value="2">Odontología</option>
-                                            <option value="3">Neurología</option>
-                                        </select>
-                                        <label>Selecciona la Especialidad</label>
-                                    </div>
-                                </div>
-        
-                                <div class="row">
-                                    <div class="input-field col s12">
-                                        <i class="material-icons prefix">people</i>
-                                        <select name="specialty">
-                                            <option value="1">Raul</option>
-                                            <option value="2">Carlos</option>
-                                            <option value="3">Beto</option>
-                                        </select>
-                                        <label>Selecciona al doctor</label>
-                                    </div>
-                                </div>
-                            @endif
-                            
-                            
-                            <div class="row">
-                                <div class="input-field col s12 m6">
-                                    <i class="material-icons prefix">today</i>
-                                    <input type="text" name="date" class="datepicker" id="datepicker" placeholder="Seleccionar Fecha">
-                                </div>
-                                <div class="input-field col s12 m6">
-                                    <i class="material-icons prefix">access_time</i>
-                                    <input type="text" name="time" class="timepicker" id="timepicker" placeholder="Seleccionar Hora">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <button class="btn waves-effect waves-light" type="submit">Agendar <i class="material-icons right">send</i></button>
-                            </div>
-                        </form>
+                        @include('theme.includes.user.patient.schedule_form', [
+                            'route' => route('backoffice.patient.store_back_schedule', $user)
+                        ])
                     </div>
                 </div>
             </div>
@@ -88,26 +43,7 @@
 @endsection
 
 @section('foot')
-    <script src="{{ asset('assets/frontoffice/plugins/pickadate/picker.js') }}"></script>
-    <script src="{{ asset('assets/frontoffice/plugins/pickadate/picker.date.js') }}"></script>
-    <script src="{{ asset('assets/frontoffice/plugins/pickadate/picker.time.js') }}"></script>
-    <script src="{{ asset('assets/frontoffice/plugins/pickadate/legacy.js') }}"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-
-            var input_date = $('.datepicker').pickadate({
-            min: true
-            });
-
-            var date_picker = input_date.pickadate('picker');
-
-            var input_time = $('.timepicker').pickatime({
-                min: 4
-            });
-
-            var time_picker = input_time.pickatime('picker');
-
-        });
-        
-    </script>
+    @include('theme.includes.user.patient.schedule_foot', [
+        'material_select' => 'material_select'
+    ])
 @endsection

@@ -25,26 +25,7 @@
             <div class="col s12 m8">
                 <div class="card-panel">
                     <div class="row">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Monto</th>
-                                    <th>Fecha</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>784</td>
-                                    <td>S/150</td>
-                                    <td>25/01/2020</td>
-                                    <td>En progreso</td>
-                                    <td><a href="">Editar</a></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        @include('theme.includes.user.patient.invoice_table')
                     </div>
                 </div>
             </div>
@@ -53,8 +34,12 @@
             </div>
         </div>
     </div>
+
+    @include('theme.includes.user.patient.invoice_modal')
+
 </div>
 @endsection
 
 @section('foot')
+    @include('theme.includes.user.patient.invoice_foot')
 @endsection

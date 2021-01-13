@@ -24,7 +24,7 @@ class Invoice extends Model
 
     public function appointment()
     {
-        return $this->belongsTo('App\Models\Appointment');
+        return $this->hasOne('App\Models\Appointment');
     }
 
     public function metas()
@@ -35,11 +35,18 @@ class Invoice extends Model
 // ALMACENAMIENTO
     public function store($request)
     {
+        $user = User::findOrFail(decrypt($request->user_id));
+
         return self::create([
             'amount' => 500,
             'status' => 'pending',
-            'user_id' => $request->user()->id 
+            'user_id' => $user->id 
         ]);
+    }
+
+    public function my_update($request)
+    {
+        self::update($request->all());
     }
 
 // RECUPERACIÓN DE INFORMACIÓN

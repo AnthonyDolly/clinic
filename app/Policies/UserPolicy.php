@@ -143,4 +143,12 @@ class UserPolicy
     {
         return $user->id == $model->id;
     }
+
+    public function view_appointments_calendar(User $user, User $model)
+    {
+        if ($user->has_role(config('app.doctor_role'))) {
+            return $user->id == $model->id;
+        }
+        return true;
+    }
 }

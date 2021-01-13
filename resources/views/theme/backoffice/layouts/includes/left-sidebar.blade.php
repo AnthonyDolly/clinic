@@ -47,6 +47,21 @@
                         <span class="nav-text">Usuarios del Sistema</span>
                     </a>
                 </li>
+                @if (user()->has_role(config('app.doctor_role')))
+                    <li class="bold">
+                        <a href="{{ route('backoffice.doctor.appointments.show', user()->id) }}" class="waves-effect waves-cyan">
+                            <i class="material-icons">access_time</i>
+                            <span class="nav-text">Mis citas</span>
+                        </a>
+                    </li>
+                @else
+                    <li class="bold">
+                        <a href="{{ route('backoffice.patient.appointments.show') }}" class="waves-effect waves-cyan">
+                            <i class="material-icons">access_time</i>
+                            <span class="nav-text">Citas del Sistema</span>
+                        </a>
+                    </li>
+                @endif
                 <li class="bold">
                     <a href="{{ route('backoffice.role.index') }}" class="waves-effect waves-cyan">
                         <i class="material-icons">perm_identity</i>
