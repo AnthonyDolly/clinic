@@ -1,1 +1,2 @@
-#Aplicación web para sistema de historia clinica
+# DENTOiMAGEN
+Aplicación web para sistema de historia clinica
